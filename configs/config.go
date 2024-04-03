@@ -43,7 +43,6 @@ func Load() error {
 
 	cfg = &Config{
 		API: APIConfig{
-			Host: viper.GetString("api.host"),
 			Port: viper.GetString("api.port"),
 		},
 		DB: DBConfig{
