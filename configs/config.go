@@ -18,7 +18,7 @@ type APIConfig struct {
 
 type DBConfig struct {
 	Host     string
-	Port     string
+	Port     int64
 	User     string
 	Pass     string
 	Database string
@@ -47,7 +47,7 @@ func Load() error {
 		},
 		DB: DBConfig{
 			Host:     viper.GetString("db.host"),
-			Port:     viper.GetString("db.port"),
+			Port:     viper.GetInt64("db.port"),
 			User:     viper.GetString("db.user"),
 			Pass:     viper.GetString("db.pass"),
 			Database: viper.GetString("db.name"),
