@@ -39,6 +39,7 @@ func Load() error {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
 			return err
 		}
+		return err
 	}
 
 	cfg = &Config{
