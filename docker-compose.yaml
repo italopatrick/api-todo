@@ -1,0 +1,50 @@
+version: "3"
+services:
+  db:
+    container_name: database
+    image: postgres:16
+    hostname: db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: admin
+      POSTGRES_DB: todo_db
+    volumes:
+      - ./ddl.sql:/docker-entrypoint-initdb.d/ddl.sql
+      - ./database/data:/var/lib/postgresql/data
+    command:
+      [
+        "postgres",
+        "-c",
+        "max_connections=500",
+        "-c",
+        "shared_buffers=256MB"
+      ]
+    healthcheck:
+      test: [ "CMD-SHELL", "sh -c 'pg_isready -U admin -d database'" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+    networks:
+      - app-network
+
+  api:
+    container_name: todo_api
+    image: golang:latest
+    hostname: api
+    working_dir: /app
+    command: tail -f /dev/null
+    volumes:
+      - ./:/app
+    ports:
+      - "8080:9000"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+networks:
+  app-network:
